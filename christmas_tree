@@ -1,0 +1,78 @@
+#!/bin/bash 
+
+width=`tput cols`
+height=`tput lines`
+
+middle=`expr $width / 2`
+
+RED="\e[0;31m"
+GREEN="\e[0;32m"
+BROWN="\e[0;33m"
+
+RESET_COLOR="\e[0m"
+
+function show_line {
+    local line_pos=$1
+    local begin_col=$2
+    local half_size=$3
+
+    #echo -n DEBUG $line_pos $begin_col $half_size
+
+    tput cup $line_pos $begin_col
+
+    local last_pos=`expr $begin_col + $half_size`
+
+    echo -en $GREEN
+    for ((j=0; j < $half_size; j++))
+    do
+        echo -en /
+    done
+    echo -n " "
+    for ((j=0; j < $half_size; j++))
+    do
+        echo -en \\
+    done
+
+    echo -e $RESET_COLOR
+}
+
+function show_part {
+    local first_line=$1
+    local part_size=$2
+    local offset=$3
+
+    #echo "offset $offset "
+
+    local end_line=`expr $first_line + $part_size`
+    local i=$first_line
+    for ((i=$first_line; i < end_line; i++))
+    #while [ $i -lt $end_line ]
+    do
+        #echo "D $offset "
+        show_line $i `expr $middle - $offset` $offset
+        offset=`expr $offset + 1`
+        #i=`expr $i + 1`
+    done
+}
+
+clear
+
+tput cup 0 $middle
+echo -e $RED*
+
+current_line=1
+current_line_size=1
+current_part_size=3
+
+while [ `expr $current_line + $current_part_size` -lt $height ]
+do
+    show_part $current_line $current_part_size $current_line_size
+    current_line_size=`expr $current_line_size + $current_part_size - 2`
+    current_line=`expr $current_line + $current_part_size`
+    current_part_size=`expr $current_part_size + 1`
+done
+
+
+    #show_part $current_line $current_part_size $current_line_size
+#show_part 4 4 2
+
