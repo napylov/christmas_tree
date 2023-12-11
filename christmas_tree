@@ -54,8 +54,6 @@ function paint_line {
     local begin_col=$2
     local half_size=$3
 
-    #echo -n DEBUG $line_pos $begin_col $half_size
-
     tput cup $line_pos $begin_col
 
     local full_size=`expr $half_size + $half_size + 1`
@@ -82,17 +80,12 @@ function paint_part {
     local part_size=$2
     local offset=$3
 
-    #echo "offset $offset "
-
     local end_line=`expr $first_line + $part_size`
     local i=$first_line
     for ((i=$first_line; i < end_line; i++))
-    #while [ $i -lt $end_line ]
     do
-        #echo "D $offset "
         paint_line $i `expr $middle - $offset` $offset
         offset=`expr $offset + 1`
-        #i=`expr $i + 1`
     done
 }
 
@@ -115,8 +108,4 @@ do
     current_line=`expr $current_line + $current_part_size`
     current_part_size=`expr $current_part_size + 1`
 done
-
-
-    #paint_part $current_line $current_part_size $current_line_size
-#paint_part 4 4 2
 
