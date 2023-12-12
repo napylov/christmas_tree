@@ -1,5 +1,8 @@
 #!/bin/bash 
 
+# (c) 2023 Alexander Napylov
+# GNU General Public License v.2.0 (see https://www.gnu.org/licenses/gpl-2.0.html)
+
 width=`tput cols`
 height=`tput lines`
 
