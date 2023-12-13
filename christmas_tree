@@ -41,6 +41,8 @@ fi
 
 BALL_COLORS=($RED $GREEN $BROWN $BLUE $PURPLE $CYAN $LIGHT_RED $LIGHT_GREEN $YELLOW $LIGHT_BLUE $LIGHT_PURPLE $BLINKING_CYAN $BLINKING_RED $BLINKING_GREEN $BLINKING_BROWN $BLINKING_BLUE $BLINKING_PURPLE $BLINKING_CYAN)
 
+done_paint=1
+
 function paint_ball {
     local line_no=$1
     local line_begin=$2
@@ -63,6 +65,11 @@ function paint_line {
     local begin_col=$2
     local half_size=$3
 
+    if [ $begin_col -lt 0 ]
+    then
+        done_paint=0
+        return
+    fi
     tput cup $line_pos $begin_col
 
     local full_size=`expr $half_size + $half_size + 1`
@@ -110,7 +117,7 @@ current_line=2
 current_line_size=1
 current_part_size=3
 
-while [ `expr $current_line + $current_part_size` -lt $height ]
+while [ `expr $current_line + $current_part_size` -lt $height -a $done_paint -eq 1 ]
 do
     paint_part $current_line $current_part_size $current_line_size
     current_line_size=`expr $current_line_size + $current_part_size - 2`
